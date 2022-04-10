@@ -1,0 +1,6 @@
+# ninja log v5
+0	484	1649596281749699324	CMakeFiles/datastructures_zadanie_3.dir/main.cpp.o	a04a11de6ec64151
+1	658	1649597677390001859	CMakeFiles/datastructures_zadanie_3.dir/Inventory.cpp.o	79151968be97c12a
+1	490	1649597384100277761	CMakeFiles/datastructures_zadanie_3.dir/Node.cpp.o	5969919081bf4931
+658	710	1649597677442001147	datastructures_zadanie_3	9a8f4128c181ae70
+1	427	1649596181007980254	CMakeFiles/datastructures_zadanie_3.dir/Article.cpp.o	66752d41149383c6

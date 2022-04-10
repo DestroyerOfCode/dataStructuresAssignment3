@@ -1,0 +1,3 @@
+/home/prepelicamangalica/CLionProjects/datastructures_zadanie_3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/prepelicamangalica/CLionProjects/datastructures_zadanie_3/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/prepelicamangalica/CLionProjects/datastructures_zadanie_3/cmake-build-debug/CMakeFiles/datastructures_zadanie_3.dir
