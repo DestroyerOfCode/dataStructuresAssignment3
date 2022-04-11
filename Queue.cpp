@@ -4,32 +4,65 @@
 
 #include "Queue.h"
 
-Queue::Queue() {
-    head=NULL;
-    tail=NULL;
-    size=0;
+template<typename T>
+void Queue<T>::push(T data) {
+    auto newNode = new Node<T>(data);
+    if (this->getTail() == nullptr) {
+        this->setHead(newNode);
+        this->setTail(newNode);
+    } else {
+        this->getTail()->setNext(newNode);
+        this->setTail(this->getTail()->getNext());
+    }
+    this->setSize(this->getSize() + 1);
 }
 
-Node *Queue::getHead() const {
+template<typename T>
+Node<T> *Queue<T>::getHead() const {
     return head;
 }
 
-void Queue::setHead(Node *head) {
+template<typename T>
+void Queue<T>::setHead(Node<T> *head) {
     Queue::head = head;
 }
 
-Node *Queue::getTail() const {
+template<typename T>
+Node<T> *Queue<T>::getTail() const {
     return tail;
 }
 
-void Queue::setTail(Node *tail) {
+template<typename T>
+void Queue<T>::setTail(Node<T> *tail) {
     Queue::tail = tail;
 }
 
-int Queue::getSize() const {
+template<typename T>
+int Queue<T>::getSize() const {
     return size;
 }
 
-void Queue::setSize(int size) {
+template<typename T>
+void Queue<T>::setSize(int size) {
     Queue::size = size;
 }
+
+template<typename T>
+Queue<T>::Queue() {
+    head = nullptr;
+    tail = nullptr;
+    size = 0;
+    totalBought = 0;
+}
+
+template<typename T>
+int Queue<T>::getTotalBought() const {
+    return totalBought;
+}
+
+template<typename T>
+void Queue<T>::setTotalBought(int totalBought) {
+    Queue::totalBought = totalBought;
+};
+
+template class Queue<Article>;

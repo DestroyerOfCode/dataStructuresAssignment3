@@ -4,26 +4,31 @@
 
 #include "Node.h"
 
-const Article &Node::getArticle() const {
-    return article;
+template<typename T>
+T Node<T>::getData() const {
+    return data;
 }
 
-void Node::setArticle(const Article &article) {
-    Node::article = article;
+template<typename T>
+void Node<T>::setData(T data) {
+    Node::data = data;
 }
 
-Node *Node::getNext() const {
+template<typename T>
+Node<T> *Node<T>::getNext() const {
     return next;
 }
 
-void Node::setNext(Node *next) {
+template<typename T>
+void Node<T>::setNext(Node<T> *next) {
     Node::next = next;
 }
 
-Node::Node(const Article &article, Node *next) : article(article), next(next) {
-    this->article = article;
-    this->next = next;
-
+template<typename T>
+Node<T>::Node(T data):data(data) {
+    this->data = data;
+    next = nullptr;
 }
 
-Node::Node() {}
+template
+class Node<Article>;

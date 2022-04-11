@@ -14,9 +14,9 @@
 
 int Inventory::start() {
     char command;
-    Queue inventoryOne = Queue();
-    Queue inventoryTwo = Queue();
-    Queue inventoryThree = Queue();
+    auto inventoryOne = new Queue<Article>();
+    auto inventoryTwo = new Queue<Article>();
+    auto inventoryThree = new Queue<Article>();
 
     std::ofstream outFile(OUTPUT_PATH, std::ios::out);
     std::ifstream inFile(INVENTORY_PATH, std::ifstream::in);
@@ -29,45 +29,45 @@ int Inventory::start() {
     while (true) {
         std::string word;
         std::string row;
+
+        Article *boughtArticle = NULL;
+        std::string id;
+        std::string quantity;
+        std::string price;
         scanf("%c", &command);
         switch (command) {
             case 'i':
                 break;
             case 'k':
+                std::cout << "Zadaj polozku, pocet ks, cenu" << std::endl;
+                std::cin >> id >> quantity >> price;
+                boughtArticle = new Article(std::stoi(id),
+                                                     "K",
+                                                     std::stoi(quantity),
+                                                     std::stod(price));
+                switch (boughtArticle->getId()) {
+                    case 1:
+                        if (boughtArticle->getTransactionType() == "K") {
+                            inventoryOne->push(*boughtArticle);
+                        }
+                        break;
+                    case 2:
+                        if (boughtArticle->getTransactionType() == "K") {
+                            inventoryTwo->push(*boughtArticle);
+                        }
+                        break;
+                    case 3:
+                        if (boughtArticle->getTransactionType() == "K") {
+                            inventoryThree->push(*boughtArticle);
+                        }
+                        break;
+                }
                 break;
             case 'p':
                 break;
             case 'n':
                 while (!(row = loadLine(row, inFile)).empty()) {
-                    std::vector<std::string> rowWords = split(row);
-                    Article article = Article(std::stoi(rowWords[0]),
-                                              rowWords[1],
-                                              std::stoi(rowWords[2]),
-                                              std::stod(rowWords[3])
-                                              );
-//                    switch(article.getId()) {
-//                        case 1:
-//                            if (inventoryOne.getNext() != NULL) {
-//                                inventoryOne.
-//                            }
-//                            inventoryOne.setArticle(article);
-//                            inventoryOne.setNext(new Node());
-//                            break;
-//                        case 2:
-//                            if (inventoryTwo.getNext() != NULL) {
-//                                inventoryTwo.
-//                            }
-//                            inventoryTwo.setArticle(article);
-//                            inventoryTwo.setNext(new Node());
-//                            break;
-//                        case 3:
-//                            if (inventoryThree.getNext() != NULL) {
-//                                inventoryThree.
-//                            }
-//                            inventoryThree.setArticle(article);
-//                            inventoryThree.setNext(new Node());
-//                            break;
-//                    }
+                    load(*inventoryOne, *inventoryTwo, *inventoryThree, row);
                 }
                 break;
             case 's':
@@ -77,6 +77,32 @@ int Inventory::start() {
             case 'x':
                 return exit();
         }
+    }
+}
+
+void Inventory::load(Queue<Article> &inventoryOne, Queue<Article> &inventoryTwo, Queue<Article> &inventoryThree,
+                     std::string &row) {
+    std::vector<std::string> rowWords = split(row);
+    Article article = Article(std::stoi(rowWords[0]),
+                              rowWords[1],
+                              std::stoi(rowWords[2]),
+                              std::stod(rowWords[3]));
+    switch (article.getId()) {
+        case 1:
+            if (article.getTransactionType() == "K") {
+                inventoryOne.push(article);
+            }
+            break;
+        case 2:
+            if (article.getTransactionType() == "K") {
+                inventoryTwo.push(article);
+            }
+            break;
+        case 3:
+            if (article.getTransactionType() == "K") {
+                inventoryThree.push(article);
+            }
+            break;
     }
 }
 
@@ -106,12 +132,12 @@ std::vector<std::string> Inventory::split(std::string text) {
     std::string word;
     std::vector<std::string> words{};
 
-    while (std::getline(sstream, word, ' ')){
+    while (std::getline(sstream, word, ' ')) {
         word.erase(std::remove_if(word.begin(), word.end(), ispunct), word.end());
         words.push_back(word);
     }
 
-    for (const auto &str : words) {
+    for (const auto &str: words) {
         std::cout << str << std::endl;
     }
 

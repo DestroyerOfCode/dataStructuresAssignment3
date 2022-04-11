@@ -4,7 +4,9 @@
 
 #include "Article.h"
 
-Article::Article(int id, std::string transactionType, int quantity, double price) : id(id), transactionType(transactionType),
+#include <utility>
+
+Article::Article(int id, std::string transactionType, int quantity, double price) : id(id), transactionType(std::move(transactionType)),
                                                                              quantity(quantity), price(price) {}
 
 Article::Article() {}
@@ -17,11 +19,11 @@ void Article::setId(int id) {
     Article::id = id;
 }
 
-std::string Article::getTransactionType() const {
+const std::string &Article::getTransactionType() const {
     return transactionType;
 }
 
-void Article::setTransactionType(std::string transactionType) {
+void Article::setTransactionType(const std::string &transactionType) {
     Article::transactionType = transactionType;
 }
 

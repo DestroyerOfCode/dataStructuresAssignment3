@@ -9,6 +9,12 @@
 #include <string>
 
 class Article {
+
+public:
+    int id;
+    std::string transactionType;
+    int quantity;
+    double price;
 public:
     Article(int id, std::string transactionType, int quantity, double price);
 
@@ -16,9 +22,9 @@ public:
 
     void setId(int id);
 
-    std::string getTransactionType() const;
+    const std::string &getTransactionType() const;
 
-    void setTransactionType(std::string transactionType);
+    void setTransactionType(const std::string &transactionType);
 
     int getQuantity() const;
 
@@ -29,12 +35,6 @@ public:
     void setPrice(double price);
 
     Article();
-
-private:
-    int id;
-    std::string transactionType;
-    int quantity;
-    double price;
 };
 
 

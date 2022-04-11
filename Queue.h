@@ -8,25 +8,33 @@
 
 #include "Node.h"
 
+template <typename T>
 class Queue {
 private:
-    Node *head;
-    Node *tail;
+    Node<T> *head;
+    Node<T> *tail;
     int size;
+    int totalBought;
 public:
-    Node *getHead() const;
+    Queue();
 
-    void setHead(Node *head);
+    int getTotalBought() const;
 
-    Node *getTail() const;
-
-    void setTail(Node *tail);
+    void setTotalBought(int totalBought);
 
     int getSize() const;
 
     void setSize(int size);
 
-    Queue();
+    void push(T data);
+
+    Node<T> *getHead() const;
+
+    void setHead(Node<T> *head);
+
+    Node<T> *getTail() const;
+
+    void setTail(Node<T> *tail);
 };
 
 

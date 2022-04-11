@@ -8,24 +8,22 @@
 
 #include "Article.h"
 
+template<typename T>
 class Node {
-public:
-    Node(const Article &article, Node *next);
-
-    Node();
 
 private:
-    Article article;
-    Node* next;
+    T data;
+    Node<T> *next;
 public:
-    const Article &getArticle() const;
+    Node(T data);
 
-    void setArticle(const Article &article);
+    T getData() const;
 
-    Node *getNext() const;
+    void setData(T data);
 
-    void setNext(Node *next);
+    Node<T> *getNext() const;
+
+    void setNext(Node<T> *next);
 };
-
 
 #endif //DATASTRUCTURES_ZADANIE_3_NODE_H
