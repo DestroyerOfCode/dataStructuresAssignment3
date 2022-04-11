@@ -27,7 +27,7 @@ public:
     void setSize(int size);
 
     void push(T data);
-
+    T* pop();
     Node<T> *getHead() const;
 
     void setHead(Node<T> *head);
@@ -35,6 +35,8 @@ public:
     Node<T> *getTail() const;
 
     void setTail(Node<T> *tail);
+
+    Queue(Queue<Article> *pQueue);
 };
 
 

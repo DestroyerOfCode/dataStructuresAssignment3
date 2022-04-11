@@ -63,6 +63,33 @@ int Queue<T>::getTotalBought() const {
 template<typename T>
 void Queue<T>::setTotalBought(int totalBought) {
     Queue::totalBought = totalBought;
+}
+
+template<typename T>
+T *Queue<T>::pop() {
+    if (tail == nullptr) {
+        return nullptr;
+    }
+
+    Node<T> *help = head;
+    T ans = head->getData();
+    head = head->getNext();
+    delete help;
+    size--;
+    if (size == 0) {
+        head == nullptr;
+        tail = nullptr;
+    }
+    return new Article(ans);
+}
+
+template<typename T>
+Queue<T>::Queue(Queue<Article> *pQueue) {
+    this->head = pQueue->head;
+    this->tail = pQueue->tail;
+    this->size = pQueue->size;
+    this->totalBought = pQueue->totalBought;
 };
 
-template class Queue<Article>;
+template
+class Queue<Article>;

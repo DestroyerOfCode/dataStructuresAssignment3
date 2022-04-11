@@ -1,3 +1,5 @@
 .idea
 cmake-build-debug
 out.txt
+cmake-build-debug/
+/cmake-build-debug
