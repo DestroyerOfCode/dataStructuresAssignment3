@@ -31,16 +31,12 @@ private:
 
     void sell(Queue<Article> *queueOne, Queue<Article> *queueTwo, Queue<Article> *queueThree);
 
-    Queue<Article>* makeSale(Queue<Article> *queue, Article *article);
+    void makeSale(Queue<Article> *queue, Article *article);
 
     Queue<Article> *getQueue(const Queue<Article> queueOne, const Queue<Article> queueTwo,
                              const Queue<Article> queueThree) const;
 
     void printInventory(Queue<Article> *queue) const;
-
-    void sell(Queue<Article> *queue, std::string id, std::string quantity, std::string price);
-
-    void sell(Queue<Article> *queue, Article *article);
 
     void summary(Queue<Article> *pQueue, Queue<Article> *pQueue1, Queue<Article> *pQueue2);
 };

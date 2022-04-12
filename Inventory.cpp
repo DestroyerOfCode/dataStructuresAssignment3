@@ -139,17 +139,17 @@ void Inventory::load(Queue<Article> *inventoryOne, Queue<Article> *inventoryTwo,
     switch (article->getId()) {
         case 1:
             article->getTransactionType() == "K" ? makePurchase(inventoryOne, article)
-                                                 : sell(inventoryOne, article);
+                                                 : makeSale(inventoryOne, article);
             inventoryOne->setTotalBought(inventoryOne->getTotalBought() + article->getQuantity());
             break;
         case 2:
             article->getTransactionType() == "K" ? makePurchase(inventoryTwo, article)
-                                                 : sell(inventoryTwo, article);
+                                                 : makeSale(inventoryTwo, article);
             inventoryTwo->setTotalBought(inventoryTwo->getTotalBought() + article->getQuantity());
             break;
         case 3:
             article->getTransactionType() == "K" ? makePurchase(inventoryThree, article)
-                                                 : sell(inventoryThree, article);
+                                                 : makeSale(inventoryThree, article);
             inventoryThree->setTotalBought(inventoryThree->getTotalBought() + article->getQuantity());
             break;
     }
@@ -206,32 +206,18 @@ void Inventory::sell(Queue<Article> *queueOne, Queue<Article> *queueTwo, Queue<A
 
     switch (article->getId()) {
         case 1:
-            queueOne = makeSale(queueOne, article);
+            makeSale(queueOne, article);
             break;
         case 2:
-            queueTwo = makeSale(queueTwo, article);
+            makeSale(queueTwo, article);
             break;
         case 3:
-            queueThree = makeSale(queueThree, article);
+            makeSale(queueThree, article);
             break;
     }
 }
 
-void Inventory::sell(Queue<Article> *queue, std::string id,
-                     std::string quantity,
-                     std::string price) {
-    sell(queue, new Article(std::stoi(id),
-                            "P",
-                            std::stoi(quantity),
-                            0));
-}
-
-
-void Inventory::sell(Queue<Article> *queue, Article *article) {
-    makeSale(queue, article);
-}
-
-Queue<Article>* Inventory::makeSale(Queue<Article> *queue, Article *article) {
+void Inventory::makeSale(Queue<Article> *queue, Article *article) {
 
     try {
         if (queue->getTotalBought() < article->getQuantity()) {
@@ -253,7 +239,6 @@ Queue<Article>* Inventory::makeSale(Queue<Article> *queue, Article *article) {
                         queue->getHead()->getData().getQuantity() - article->getQuantity());
                 article->setQuantity(0);
             }
-            return queue;
         }
     } catch (std::invalid_argument &e) {
         std::cerr << e.what();
