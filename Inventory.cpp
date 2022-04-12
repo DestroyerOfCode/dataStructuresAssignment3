@@ -31,11 +31,9 @@ int Inventory::start() {
         std::string word;
         std::string row;
 
-        Article *a;
         scanf("%c", &command);
         switch (command) {
             case 'i':
-
                 tempInventory = getQueue(inventoryOne, inventoryTwo, inventoryThree);
                 printInventory(tempInventory);
                 break;
@@ -56,9 +54,12 @@ int Inventory::start() {
                 summary(inventoryOne, inventoryTwo, inventoryThree);
                 break;
             case 'w':
+                writeToFile(inventoryOne, outFile);
+                writeToFile(inventoryTwo, outFile);
+                writeToFile(inventoryThree, outFile);
                 break;
             case 'x':
-                return exit();
+                return exit(outFile, inFile);
         }
     }
 }
@@ -78,16 +79,21 @@ Queue<Article> *Inventory::getQueue(const Queue<Article> queueOne, const Queue<A
     std::string id;
     std::cout << "Zadaj svoju volbu" << std::endl;
     std::cin >> id;
-    switch (std::stoi(id)) {
-        case 1:
-            tempQueue = new Queue<Article>(queueOne);
-            break;
-        case 2:
-            tempQueue = new Queue<Article>(queueTwo);
-            break;
-        case 3:
-            tempQueue = new Queue<Article>(queueThree);
-            break;
+    try {
+        switch (std::stoi(id)) {
+            case 1:
+                tempQueue = new Queue<Article>(queueOne);
+                break;
+            case 2:
+                tempQueue = new Queue<Article>(queueTwo);
+                break;
+            case 3:
+                tempQueue = new Queue<Article>(queueThree);
+                break;
+        }
+    } catch (std::exception &e) {
+        std::cerr << e.what() << "\nProblem pri zvoleni parametrov" << std::endl;
+
     }
     return tempQueue;
 }
@@ -98,56 +104,63 @@ void Inventory::buy(Queue<Article> *inventoryOne, Queue<Article> *inventoryTwo, 
     std::string id;
     std::string quantity;
     std::string price;
+    try {
+        std::cout << "Zadaj polozku, pocet ks, cenu" << std::endl;
+        std::cin >> id >> quantity >> price;
 
-    std::cout << "Zadaj polozku, pocet ks, cenu" << std::endl;
-    std::cin >> id >> quantity >> price;
+        article = new Article(std::stoi(id),
+                              "K",
+                              std::stoi(quantity),
+                              std::stod(price));
 
-    article = new Article(std::stoi(id),
-                          "K",
-                          std::stoi(quantity),
-                          std::stod(price));
-
-    switch (article->getId()) {
-        case 1:
-            makePurchase(inventoryOne, article);
-            break;
-        case 2:
-            makePurchase(inventoryTwo, article);
-            break;
-        case 3:
-            makePurchase(inventoryThree, article);
-            break;
+        switch (article->getId()) {
+            case 1:
+                makePurchase(inventoryOne, article);
+                break;
+            case 2:
+                makePurchase(inventoryTwo, article);
+                break;
+            case 3:
+                makePurchase(inventoryThree, article);
+                break;
+        }
+    } catch (std::exception &e) {
+        std::cerr << e.what() << "\nProblem pri zvoleni parametrov" << std::endl;
     }
 }
 
 void Inventory::makePurchase(Queue<Article> *inventory, Article *boughtArticle) const {
-        inventory->push(boughtArticle);
-        inventory->setTotalBought(inventory->getTotalBought() + boughtArticle->getQuantity());
-    }
+    inventory->push(boughtArticle);
+    inventory->setTotalBought(inventory->getTotalBought() + boughtArticle->getQuantity());
+}
 
 void Inventory::load(Queue<Article> *inventoryOne, Queue<Article> *inventoryTwo, Queue<Article> *inventoryThree,
                      std::string &row) {
-    std::vector<std::string> rowWords = split(row);
-    auto *article = new Article(std::stoi(rowWords[0]),
-                                rowWords[1],
-                                std::stoi(rowWords[2]),
-                                std::stod(rowWords[3]));
-    switch (article->getId()) {
-        case 1:
-            article->getTransactionType() == "K" ? makePurchase(inventoryOne, article)
-                                                 : makeSale(inventoryOne, article);
-            inventoryOne->setTotalBought(inventoryOne->getTotalBought() + article->getQuantity());
-            break;
-        case 2:
-            article->getTransactionType() == "K" ? makePurchase(inventoryTwo, article)
-                                                 : makeSale(inventoryTwo, article);
-            inventoryTwo->setTotalBought(inventoryTwo->getTotalBought() + article->getQuantity());
-            break;
-        case 3:
-            article->getTransactionType() == "K" ? makePurchase(inventoryThree, article)
-                                                 : makeSale(inventoryThree, article);
-            inventoryThree->setTotalBought(inventoryThree->getTotalBought() + article->getQuantity());
-            break;
+    std::vector<std::string> rowWords = split(row, ' ');
+    try {
+        auto *article = new Article(std::stoi(rowWords[0]),
+                                    rowWords[1],
+                                    std::stoi(rowWords[2]),
+                                    std::stod(rowWords[3]));
+        switch (article->getId()) {
+            case 1:
+                article->getTransactionType() == "K" ? makePurchase(inventoryOne, article)
+                                                     : makeSale(inventoryOne, article);
+                inventoryOne->setTotalBought(inventoryOne->getTotalBought() + article->getQuantity());
+                break;
+            case 2:
+                article->getTransactionType() == "K" ? makePurchase(inventoryTwo, article)
+                                                     : makeSale(inventoryTwo, article);
+                inventoryTwo->setTotalBought(inventoryTwo->getTotalBought() + article->getQuantity());
+                break;
+            case 3:
+                article->getTransactionType() == "K" ? makePurchase(inventoryThree, article)
+                                                     : makeSale(inventoryThree, article);
+                inventoryThree->setTotalBought(inventoryThree->getTotalBought() + article->getQuantity());
+                break;
+        }
+    } catch (std::exception &e) {
+        std::cerr << e.what() << "\nProblem pri zvoleni parametrov" << std::endl;
     }
 }
 
@@ -163,7 +176,12 @@ void Inventory::printMenu() {
     std::cout.flush();
 }
 
-int Inventory::exit() {
+int Inventory::exit(std::ofstream &ofstream, std::ifstream &ifstream) {
+    ifstream.close();
+    ofstream.close();
+    if (ofstream.bad() || ifstream.bad()) {
+        throw std::runtime_error("Could not close file");
+    }
     return 0;
 }
 
@@ -172,21 +190,28 @@ std::string Inventory::loadLine(std::string row, std::ifstream &inFile) {
     return row;
 }
 
-std::vector<std::string> Inventory::split(std::string text) {
-    std::stringstream sstream(text);
-    std::string word;
-    std::vector<std::string> words{};
+std::vector<std::string> Inventory::split(const std::string &str, const char &ch) {
+    std::string next;
+    std::vector<std::string> result;
 
-    while (std::getline(sstream, word, ' ')) {
-        word.erase(std::remove_if(word.begin(), word.end(), ispunct), word.end());
-        words.push_back(word);
+    // For each character in the string
+    for (std::string::const_iterator it = str.begin(); it != str.end(); it++) {
+        // If we've hit the terminal character
+        if (*it == ch) {
+            // If we have some characters accumulated
+            if (!next.empty()) {
+                // Add them to the result vector
+                result.push_back(next);
+                next.clear();
+            }
+        } else {
+            // Accumulate the next character into the sequence
+            next += *it;
+        }
     }
-
-    for (const auto &str: words) {
-        std::cout << str << std::endl;
-    }
-
-    return words;
+    if (!next.empty())
+        result.push_back(next);
+    return result;
 }
 
 void Inventory::sell(Queue<Article> *queueOne, Queue<Article> *queueTwo, Queue<Article> *queueThree) {
@@ -194,22 +219,26 @@ void Inventory::sell(Queue<Article> *queueOne, Queue<Article> *queueTwo, Queue<A
     std::string quantity;
     std::string price;
     std::cout << "Zadaj polozku, pocet ks" << std::endl;
-    std::cin >> id >> quantity;
-    auto *article = new Article(std::stoi(id),
-                                "P",
-                                std::stoi(quantity),
-                                0);
+    try {
+        std::cin >> id >> quantity;
+        auto *article = new Article(std::stoi(id),
+                                    "P",
+                                    std::stoi(quantity),
+                                    0);
 
-    switch (article->getId()) {
-        case 1:
-            makeSale(queueOne, article);
-            break;
-        case 2:
-            makeSale(queueTwo, article);
-            break;
-        case 3:
-            makeSale(queueThree, article);
-            break;
+        switch (article->getId()) {
+            case 1:
+                makeSale(queueOne, article);
+                break;
+            case 2:
+                makeSale(queueTwo, article);
+                break;
+            case 3:
+                makeSale(queueThree, article);
+                break;
+        }
+    } catch (std::exception &e) {
+        std::cerr << e.what() << "\nProblem pri zvoleni parametrov" << std::endl;
     }
 }
 
@@ -242,8 +271,61 @@ void Inventory::makeSale(Queue<Article> *queue, Article *article) {
 }
 
 void Inventory::summary(Queue<Article> *pQueue, Queue<Article> *pQueue1, Queue<Article> *pQueue2) {
-    printInventory(new Queue<Article>(pQueue));
-    printInventory(new Queue<Article>(pQueue1));
-    printInventory(new Queue<Article>(pQueue2));
+    std::cout << "Item 1: " << std::endl;
+    printInventoryAndSum(new Queue<Article>(pQueue));
+    std::cout << "Item 2: " << std::endl;
+    printInventoryAndSum(new Queue<Article>(pQueue1));
+    std::cout << "Item 3: " << std::endl;
+    printInventoryAndSum(new Queue<Article>(pQueue2));
+
+}
+
+void Inventory::printInventoryAndSum(Queue<Article> *pQueue) {
+    std::map<double, int> pricesAndUnits = getMapOfPricesAndUnits(pQueue);
+    int total = 0;
+    for (const auto&[key, value]: pricesAndUnits) {
+        std::cout << value << " units " << key << " EUR" << std::endl;
+        total += key * value;
+    }
+
+    std::cout << "Summary: " << total << " EUR" << std::endl;
+
+}
+
+std::map<double, int>
+Inventory::getMapOfPricesAndUnits(Queue<Article> *pQueue) const {
+    std::map<double, int> pricesAndUnits = {};
+    while (pQueue->getHead() != nullptr) {
+
+        if (!pricesAndUnits.contains(pQueue->getHead()->getData()->getPrice())) {
+            pricesAndUnits.insert(
+                    {pQueue->getHead()->getData()->getPrice(), pQueue->getHead()->getData()->getQuantity()});
+            pQueue->setHead(pQueue->getHead()->getNext());
+            continue;
+        }
+
+        pricesAndUnits[pQueue->getHead()->getData()->getPrice()] += pQueue->getHead()->getData()->getQuantity();
+
+        pQueue->setHead(pQueue->getHead()->getNext());
+
+    }
+
+    return pricesAndUnits;
+}
+
+void Inventory::writeToFile(Queue<Article> *pQueue, std::ofstream &ofstream) {
+
+    while (pQueue->getHead() != nullptr) {
+
+        Article *article = pQueue->getHead()->getData();
+        std::string lineToFile = std::to_string(article->getId()) + " " +
+                                 article->getTransactionType() + " " +
+                                 std::to_string(article->getQuantity()) + " " +
+                                 std::to_string(article->getPrice());
+
+        ofstream << lineToFile;
+        pQueue->setHead(pQueue->getHead()->getNext());
+
+    }
 
 }
