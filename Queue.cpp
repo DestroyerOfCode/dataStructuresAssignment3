@@ -5,7 +5,7 @@
 #include "Queue.h"
 
 template<typename T>
-void Queue<T>::push(T data) {
+void Queue<T>::push(T* data) {
     auto newNode = new Node<T>(data);
     if (this->getTail() == nullptr) {
         this->setHead(newNode);
@@ -72,7 +72,7 @@ T *Queue<T>::pop() {
     }
 
     Node<T> *help = head;
-    T ans = head->getData();
+    T* ans = head->getData();
     head = head->getNext();
     delete help;
     size--;
@@ -80,7 +80,7 @@ T *Queue<T>::pop() {
         head == nullptr;
         tail = nullptr;
     }
-    return new Article(ans);
+    return ans;
 }
 
 template<typename T>

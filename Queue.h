@@ -8,7 +8,7 @@
 
 #include "Node.h"
 
-template <typename T>
+template<typename T>
 class Queue {
 private:
     Node<T> *head;
@@ -26,8 +26,10 @@ public:
 
     void setSize(int size);
 
-    void push(T data);
-    T* pop();
+    void push(T* data);
+
+    T *pop();
+
     Node<T> *getHead() const;
 
     void setHead(Node<T> *head);

@@ -65,8 +65,8 @@ int Inventory::start() {
 
 void Inventory::printInventory(Queue<Article> *queue) const {
     while (queue->getHead() != nullptr) {
-        std::cout << queue->getHead()->getData().getQuantity() << " units - " <<
-                  queue->getHead()->getData().getPrice() << " EUR" << std::endl;
+        std::cout << queue->getHead()->getData()->getQuantity() << " units - " <<
+                  queue->getHead()->getData()->getPrice() << " EUR" << std::endl;
 
         queue->setHead(queue->getHead()->getNext());
     }
@@ -120,14 +120,10 @@ void Inventory::buy(Queue<Article> *inventoryOne, Queue<Article> *inventoryTwo, 
     }
 }
 
-void Inventory::makePurchase(Queue<Article> *inventory, const Article *boughtArticle) const {
-    if (inventory->getTotalBought() <= boughtArticle->getQuantity() &&
-        boughtArticle->getTransactionType() == "K") {
-
-        inventory->push(*boughtArticle);
+void Inventory::makePurchase(Queue<Article> *inventory, Article *boughtArticle) const {
+        inventory->push(boughtArticle);
         inventory->setTotalBought(inventory->getTotalBought() + boughtArticle->getQuantity());
     }
-}
 
 void Inventory::load(Queue<Article> *inventoryOne, Queue<Article> *inventoryTwo, Queue<Article> *inventoryThree,
                      std::string &row) {
@@ -227,7 +223,7 @@ void Inventory::makeSale(Queue<Article> *queue, Article *article) {
         while (queue->getHead() != nullptr &&
                article->getQuantity() != 0) {
 
-            if (article->getQuantity() >= queue->getHead()->getData().getQuantity()) {
+            if (article->getQuantity() >= queue->getHead()->getData()->getQuantity()) {
                 Article *removedArticle = queue->pop();
                 int numberOfRemovedArticledFromNode = removedArticle->getQuantity();
 
@@ -235,13 +231,13 @@ void Inventory::makeSale(Queue<Article> *queue, Article *article) {
                 article->setQuantity(article->getQuantity() - numberOfRemovedArticledFromNode);
             } else {
                 queue->setTotalBought(queue->getTotalBought() - article->getQuantity());
-                queue->getHead()->getData().setQuantity(
-                        queue->getHead()->getData().getQuantity() - article->getQuantity());
+                queue->getHead()->getData()->setQuantity(
+                        queue->getHead()->getData()->getQuantity() - article->getQuantity());
                 article->setQuantity(0);
             }
         }
     } catch (std::invalid_argument &e) {
-        std::cerr << e.what();
+        std::cerr << e.what() << std::endl;
     }
 }
 

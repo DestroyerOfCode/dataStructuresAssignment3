@@ -12,14 +12,14 @@ template<typename T>
 class Node {
 
 private:
-    T data;
+    T* data;
     Node<T> *next;
 public:
-    Node(T data);
+    Node(T *data);
 
-    T getData() const;
+    T *getData() const;
 
-    void setData(T data);
+    void setData(T *data);
 
     Node<T> *getNext() const;
 

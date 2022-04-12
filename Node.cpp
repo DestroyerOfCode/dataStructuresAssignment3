@@ -5,16 +5,6 @@
 #include "Node.h"
 
 template<typename T>
-T Node<T>::getData() const {
-    return data;
-}
-
-template<typename T>
-void Node<T>::setData(T data) {
-    Node::data = data;
-}
-
-template<typename T>
 Node<T> *Node<T>::getNext() const {
     return next;
 }
@@ -25,9 +15,19 @@ void Node<T>::setNext(Node<T> *next) {
 }
 
 template<typename T>
-Node<T>::Node(T data):data(data) {
+Node<T>::Node(T *data):data(data) {
     this->data = data;
     next = nullptr;
+}
+
+template<typename T>
+T *Node<T>::getData() const {
+    return data;
+}
+
+template<typename T>
+void Node<T>::setData(T *data) {
+    Node::data = data;
 }
 
 template

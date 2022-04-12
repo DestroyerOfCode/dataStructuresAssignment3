@@ -27,7 +27,7 @@ private:
 
     void buy(Queue<Article> *inventoryOne, Queue<Article> *inventoryTwo, Queue<Article> *inventoryThree) const;
 
-    void makePurchase(Queue<Article> *inventory, const Article *boughtArticle) const;
+    void makePurchase(Queue<Article> *inventory, Article *boughtArticle) const;
 
     void sell(Queue<Article> *queueOne, Queue<Article> *queueTwo, Queue<Article> *queueThree);
 
