@@ -77,7 +77,7 @@ T *Queue<T>::pop() {
     delete help;
     size--;
     if (size == 0) {
-        head == nullptr;
+        head = nullptr;
         tail = nullptr;
     }
     return ans;

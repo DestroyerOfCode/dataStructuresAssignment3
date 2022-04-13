@@ -7,7 +7,6 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
-#include <sstream>
 #include "Inventory.h"
 #include "Node.h"
 #include "Queue.h"
